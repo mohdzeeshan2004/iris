@@ -62,6 +62,7 @@ elif eda_option == "Distribution Plot":
     sns.histplot(data[column], kde=True, ax=ax)
     ax.set_title(f"Distribution of {column}")
     st.pyplot(fig)
+    plt.close()
 
 # ===================== JOINT PLOT =====================
 elif eda_option == "Joint Plot":
@@ -75,8 +76,15 @@ elif eda_option == "Joint Plot":
         st.warning("⚠️ Please select different columns for X and Y axis")
     else:
         kind = st.selectbox("Plot Type", ["scatter", "reg", "hex", "kde"])
-        fig = sns.jointplot(x=x_col, y=y_col, data=data, kind=kind, hue="species" if kind in ["scatter", "kde"] else None)
+        
+        # Joint plot doesn't support hue for all kinds
+        if kind in ["scatter", "kde"]:
+            fig = sns.jointplot(x=x_col, y=y_col, data=data, kind=kind, hue="species")
+        else:
+            fig = sns.jointplot(x=x_col, y=y_col, data=data, kind=kind)
+        
         st.pyplot(fig)
+        plt.close()
 
 # ===================== PAIR PLOT =====================
 elif eda_option == "Pair Plot":
@@ -84,6 +92,7 @@ elif eda_option == "Pair Plot":
     st.info("Color coded by species")
     fig = sns.pairplot(data, hue="species")
     st.pyplot(fig)
+    plt.close()
 
 # ===================== BOXEN PLOT =====================
 elif eda_option == "Boxen Plot":
@@ -95,6 +104,7 @@ elif eda_option == "Boxen Plot":
     sns.boxenplot(x="species", y=y_col, data=data, ax=ax)
     ax.set_title(f"Boxen Plot: {y_col} by Species")
     st.pyplot(fig)
+    plt.close()
 
 # ===================== STRIP PLOT =====================
 elif eda_option == "Strip Plot":
@@ -106,6 +116,7 @@ elif eda_option == "Strip Plot":
     sns.stripplot(x="species", y=y_col, data=data, ax=ax)
     ax.set_title(f"Strip Plot: {y_col} by Species")
     st.pyplot(fig)
+    plt.close()
 
 # ===================== SWARM PLOT =====================
 elif eda_option == "Swarm Plot":
@@ -117,7 +128,8 @@ elif eda_option == "Swarm Plot":
     sns.swarmplot(x="species", y=y_col, data=data, ax=ax)
     ax.set_title(f"Swarm Plot: {y_col} by Species")
     st.pyplot(fig)
+    plt.close()
 
 # Footer
 st.markdown("---")
-st.markdown("✅ **IRIS Dataset EDA using Streamlit & Seaborn**")
+st.markdown("✅ **IRIS Dataset EDA using Streamlit & Seaborn**
